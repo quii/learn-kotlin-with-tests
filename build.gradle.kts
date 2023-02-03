@@ -15,6 +15,10 @@ repositories {
 dependencies {
     implementation("com.natpryce:hamkrest:1.8.0.1")
     testImplementation(kotlin("test"))
+    implementation(platform("org.http4k:http4k-bom:4.37.0.0"))
+    implementation("org.http4k:http4k-core")
+    implementation("org.http4k:http4k-server-undertow")
+    implementation("org.http4k:http4k-client-apache")
 }
 
 tasks.test {

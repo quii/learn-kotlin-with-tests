@@ -10,15 +10,16 @@ import shapes.Square
 class ShapesKtTest {
     @Test
     fun `square`() {
-        assertThat(Square(2), hasPerimeter(8))
-        assertThat(Square(2), hasArea(4))
-
+        val square = Square(2)
+        assertThat(square, hasPerimeter(8))
+        assertThat(square, hasArea(4))
     }
 
     @Test
     fun `rectangle`() {
-        assertThat(Rectangle(2, 3), hasPerimeter(10))
-        assertThat(Rectangle(2, 3), hasArea(6))
+        val rectangle = Rectangle(2, 3)
+        assertThat(rectangle, hasPerimeter(10))
+        assertThat(rectangle, hasArea(6))
     }
 }
 
