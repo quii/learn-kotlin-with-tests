@@ -20,6 +20,7 @@ class ExpressionsKtTest {
         val result = exceptionsAsExpressions(true)
         assertThat(result, equalTo(2))
     }
+
 }
 
 fun exceptionsAsExpressions(blowup: Boolean): Int {
