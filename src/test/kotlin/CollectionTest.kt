@@ -8,6 +8,21 @@ class IterationKtTest {
     @Test
     fun `playing around with lists`() {
         assertThat( List(5) {"a"}, equalTo(listOf("a", "a", "a", "a", "a")))
+
+        val list = listOf(1, 2, 3)
+        assertThat(1 in list, equalTo(true))
+        assertThat(4 in list, equalTo(false))
+    }
+
+    @Test
+    fun `mutable lists`() {
+        val list = mutableListOf(1, 2, 3)
+        assertThat(list, equalTo(listOf(1, 2, 3)))
+        list.add(4)
+        assertThat(list, equalTo(listOf(1, 2, 3, 4)))
+
+        assertThat(list + 5, equalTo(listOf(1, 2, 3, 4, 5)))
+        assertThat(list -1, equalTo(listOf(2, 3, 4)))
     }
 
     @Test
@@ -27,6 +42,23 @@ class IterationKtTest {
     @Test
     fun `char ranges`() {
         assertThat(('a'..'e').toList(), equalTo(listOf('a', 'b', 'c', 'd', 'e')))
+    }
+
+    @Test
+    fun `maps`() {
+        val map = mapOf(1 to "one", 2 to "two")
+        assertThat(map[1], equalTo("one"))
+        assertThat(map[2], equalTo("two"))
+    }
+
+    @Test
+    fun `sets`() {
+        val set = setOf(1, 2, 3)
+        assertThat(set, equalTo(setOf(1, 2, 3)))
+        assertThat(set + 4, equalTo(setOf(1, 2, 3, 4)))
+        assertThat(set - 2, equalTo(setOf(1, 3)))
+        assertThat(1 in set, equalTo(true))
+        assertThat(4 in set, equalTo(false))
     }
 }
 
