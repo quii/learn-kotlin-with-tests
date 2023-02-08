@@ -21,6 +21,10 @@ class ClassTest {
                 fuelLevel = 50
             }
         }
+
+        companion object {
+            fun carsGoVroom() = "Vroom"
+        }
     }
 
     @Test
@@ -55,5 +59,10 @@ class ClassTest {
         val car = Car(2019, "Blue", registration = "ABC123")
         // "blue cars have less fuel, for reasons"
         assertThat(car.fuelLevel, equalTo(50))
+    }
+
+    @Test
+    fun `companion objects are like static methods`() {
+        assertThat(Car.carsGoVroom(), equalTo("Vroom"))
     }
 }
