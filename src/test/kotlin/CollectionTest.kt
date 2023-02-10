@@ -3,6 +3,7 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
 import org.junit.jupiter.api.Test
+import kotlin.time.measureTime
 
 class IterationKtTest {
     @Test
@@ -59,6 +60,40 @@ class IterationKtTest {
         assertThat(set - 2, equalTo(setOf(1, 3)))
         assertThat(1 in set, equalTo(true))
         assertThat(4 in set, equalTo(false))
+    }
+
+    @Test
+    fun `filter map`() {
+        val list = listOf(1, 2, 3, 4, 5)
+        val doubleLambda = { x: Int -> x * 2 }
+        val doubleEvens = list.filter { it % 2 == 0 }.map(doubleLambda)
+        assertThat(doubleEvens, equalTo(listOf(4, 8)))
+    }
+
+    data class Person(val name: String, val age: Int)
+    @Test
+    fun `sequences are lazy collections`(){
+        val people = listOf(
+            Person("Jane", 19),
+            Person("Chris", 30),
+            Person("Sarah", 31),
+            Person("John", 32)
+        )
+
+        var under21Calls = 0
+        val under21: (Person)->Boolean = { p: Person ->
+            under21Calls++
+             p.age < 21
+        }
+        val firstPersonUnder21 = people.asSequence().filter(under21).first()
+        assertThat(firstPersonUnder21, equalTo(Person("Jane", 19)))
+        assertThat(under21Calls, equalTo(1))
+
+        // with eager
+        under21Calls = 0
+        val firstPersonUnder21Eager = people.filter(under21).first()
+        assertThat(firstPersonUnder21Eager, equalTo(Person("Jane", 19)))
+        assertThat(under21Calls, equalTo(4))
     }
 }
 
