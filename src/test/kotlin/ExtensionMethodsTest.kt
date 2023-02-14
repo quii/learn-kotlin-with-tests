@@ -11,6 +11,13 @@ class ExtensionMethodsTest {
     }
 
     @Test
+    fun `infix lets us drop dots, which is crucial`() {
+        infix fun String.meow(times: Int) = "${"meow".repeat(times)} $this"
+
+        assertThat("Chris" meow 3, equalTo("meowmeowmeow Chris"))
+    }
+
+    @Test
     fun `we can add a static method toURL to String`() {
         fun String.Companion.toURL(link: String) = java.net.URL(link)
 
