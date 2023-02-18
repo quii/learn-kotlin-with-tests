@@ -1,8 +1,9 @@
+import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.throws
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import strikt.api.*
+import strikt.assertions.*
 
 class ClassTest {
 
@@ -10,14 +11,14 @@ class ClassTest {
         var fuelLevel = 100
         var registrationNumber = registration
             set(value) {
-                if (value.length !=6) {
+                if (value.length != 6) {
                     throw IllegalArgumentException("Registration number must be 6 characters")
                 }
                 field = value
             }
 
         init {
-            if(colour=="Blue") {
+            if (colour == "Blue") {
                 fuelLevel = 50
             }
         }
@@ -34,7 +35,7 @@ class ClassTest {
     }
 
     @Test
-    fun `you can set read-write properties with var, and give them default values`(){
+    fun `you can set read-write properties with var, and give them default values`() {
         val car = Car(2019, registration = "ABC123")
         assertThat(car.colour, equalTo("Red"))
         car.colour = "Blue"
@@ -42,16 +43,30 @@ class ClassTest {
     }
 
     @Test
-    fun `you can create setters with validation`(){
+    fun `you can create setters with validation`() {
         val car = Car(2019, registration = "ABC123")
         assertThat(car.registrationNumber, equalTo("ABC123"))
-        assertThrows<java.lang.IllegalArgumentException> { car.registrationNumber="" }
+        assertThrows<java.lang.IllegalArgumentException> { car.registrationNumber = "" }
     }
 
     @Test
     fun `you can make properties outside the constructor too of course`() {
         val car = Car(2019, registration = "ABC123")
-        assertThat(car.fuelLevel, equalTo(100))
+        assertThat(
+            car,
+            allOf(
+                has(Car::yearOfMake, equalTo(2019)),
+                has(Car::colour, equalTo("Red")),
+                has(Car::fuelLevel, equalTo(100))
+            )
+        )
+
+        // using strikt, which is recommended over hamkrest, oh my
+        expectThat(car) {
+            get { yearOfMake }.isEqualTo(2019)
+            get { colour }.isEqualTo("Red")
+            get { fuelLevel }.isEqualTo(100)
+        }
     }
 
     @Test
