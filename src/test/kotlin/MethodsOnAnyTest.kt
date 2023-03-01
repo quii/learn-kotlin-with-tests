@@ -5,7 +5,7 @@ import java.lang.StringBuilder
 
 class MethodsOnAnyTest {
     @Test
-    fun `what does let do`() {
+    fun `let takes the object as the argument, and will return the result`() {
         val result = 10.let { arg ->
             print("lol")
             arg+ 2
@@ -22,9 +22,12 @@ class MethodsOnAnyTest {
     }
 
     @Test
-    fun `let is also useful for dealing with nulls`() {
+    fun `let is also useful for working with nulls, works like map on an option from scala`() {
         val result = "hello".let { it.length }
         assertThat(result, equalTo(5))
+        val poo: String? = null
+        assertThat(poo?.let { it.length }, equalTo(null))
+        assertThat(poo?.let {"hello"}, equalTo(null))
     }
 
     @Test
