@@ -3,7 +3,13 @@ import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.time.measureTime
+
+inline fun <T> T.takeElf(predicate: (T) -> Boolean): T? {
+    return if (predicate(this)) this else null
+}
 
 class NullTest {
     @Test
@@ -55,6 +61,10 @@ class NullTest {
             expectThat(f(11)).isEqualTo(22)
         }
     }
+
+    class TakeElfBonusMultiplier: BonusMultiplierContract({ score ->
+        score.takeElf { it > 10 }?.let { it * 2 } ?: score}
+    )
 
     class IfMultiplier : BonusMultiplierContract({score ->
         if (score > 10) score * 2 else score

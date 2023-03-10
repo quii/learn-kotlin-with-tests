@@ -3,6 +3,8 @@ import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
 import java.lang.StringBuilder
 
+fun <T> T.printed(): T = this.also(::println)
+
 class MethodsOnAnyTest {
     @Test
     fun `let takes the object as the argument, and will return the result`() {
@@ -61,6 +63,12 @@ class MethodsOnAnyTest {
             totalAges+= it.age // side-effect
         }
         assertThat(totalAges, equalTo(30))
+    }
+
+    @Test
+    fun `can add side-effecty things with also extensions - reminds me of peeking into promises in js`() {
+        1.printed()
+        "Poop".printed()
     }
 
     @Test
