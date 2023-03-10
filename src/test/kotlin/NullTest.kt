@@ -3,6 +3,7 @@ import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import kotlin.time.measureTime
 
 class NullTest {
     @Test
@@ -54,6 +55,10 @@ class NullTest {
             expectThat(f(11)).isEqualTo(22)
         }
     }
+
+    class IfMultiplier : BonusMultiplierContract({score ->
+        if (score > 10) score * 2 else score
+    })
 
     class TakeIfBonusMultiplier : BonusMultiplierContract({ score ->
         score.takeIf { it > 10 }?.let { it * 2 } ?: score}
