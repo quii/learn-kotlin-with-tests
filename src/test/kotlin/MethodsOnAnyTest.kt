@@ -1,6 +1,8 @@
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import java.lang.StringBuilder
 
 fun <T> T.printed(): T = this.also(::println)
@@ -67,8 +69,8 @@ class MethodsOnAnyTest {
 
     @Test
     fun `can add side-effecty things with also extensions - reminds me of peeking into promises in js`() {
-        1.printed()
-        "Poop".printed()
+        expectThat(1.printed()).isEqualTo(1)
+        expectThat("Poop".printed()).isEqualTo("Poop")
     }
 
     @Test
