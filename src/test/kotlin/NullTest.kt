@@ -55,7 +55,9 @@ class NullTest {
         }
     }
 
-    class TakeIfBonusMultiplier : BonusMultiplierContract({ score -> score.takeIf { it > 10 }?.let { it * 2 } ?: score})
+    class TakeIfBonusMultiplier : BonusMultiplierContract({ score ->
+        score.takeIf { it > 10 }?.let { it * 2 } ?: score}
+    )
     class WhenBonusMultiplier : BonusMultiplierContract({score -> when {
         score > 10 -> score * 2
         else -> score
