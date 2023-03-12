@@ -9,12 +9,15 @@ fun <T> T.printed(): T = this.also(::println)
 
 class MethodsOnAnyTest {
     @Test
-    fun `let takes the object as the argument, and will return the result`() {
+    fun `let takes the object as the argument to the lambda, and will return the result`() {
         val result = 10.let { arg ->
             print("lol")
             arg+ 2
         }
         assertThat(result, equalTo(12))
+
+        val add5: (Int) -> Int = { it + 5 }
+        assertThat(10.let(add5), equalTo(15))
     }
     @Test
     fun `also is like let, but the result is ignored`() {
