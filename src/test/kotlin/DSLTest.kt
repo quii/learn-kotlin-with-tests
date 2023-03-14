@@ -33,6 +33,8 @@ data class Meeting(val title: String) {
     override fun toString() = "$title meeting from $start to $end"
 }
 
+fun String.shout() = this.uppercase()
+
 infix fun String.meeting(block: Meeting.() -> Unit): Meeting {
     val meeting = Meeting(this)
     meeting.block()

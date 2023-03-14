@@ -34,4 +34,10 @@ class FunctorsTest {
         expectThat(b1).isEqualTo(Identity(5))
         expectThat(b2).isEqualTo(Identity(5))
     }
+
+    @Test
+    fun `map on collections`() {
+        val x = listOf("cat", "elephant", "spaghetti")
+        expectThat(x.map(String::length)).isEqualTo(listOf(3, 8, 9))
+    }
 }

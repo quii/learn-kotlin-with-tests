@@ -3,7 +3,8 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
 import org.junit.jupiter.api.Test
-import kotlin.time.measureTime
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class IterationKtTest {
     @Test
@@ -91,10 +92,26 @@ class IterationKtTest {
 
         // with eager
         under21Calls = 0
-        val firstPersonUnder21Eager = people.filter(under21).first()
+        val firstPersonUnder21Eager = people.first(under21)
         assertThat(firstPersonUnder21Eager, equalTo(Person("Jane", 19)))
         assertThat(under21Calls, equalTo(4))
     }
+
+    @Test
+    fun `type aliases are a nice way to encapsulate collections`() {
+        val x = ChrisCollection(listOf(1, 2, 3))
+        val y: ChrisCollection = listOf(4, 5, 6)
+
+        expectThat(x.FancySum).isEqualTo(6)
+        expectThat(y.FancySum).isEqualTo(15)
+    }
 }
+
+typealias ChrisCollection = List<Int>
+
+fun ChrisCollection(items: List<Int>) = items
+
+val ChrisCollection.FancySum: Int
+    get() = this.reduce{acc, i -> acc + i}
 
 fun isAListOf(vararg elements: Int): Matcher<IntRange> = has(IntRange::toList, equalTo(elements.toList()))
