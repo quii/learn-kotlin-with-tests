@@ -2,6 +2,8 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import kotlin.properties.Delegates.observable
 
 interface Worker {
@@ -78,5 +80,19 @@ class DelegationTest {
         assertThat(calls, equalTo(0))
         assertThat(lazyValue, equalTo("expensive computation"))
         assertThat(calls, equalTo(1))
+    }
+
+    class ShoppingBasket(
+        val user: String,
+        val items: List<String>,
+    ): List<String> by items
+
+    @Test
+    fun `collections with other properties`() {
+        // this approach lets callers leverage the collections API however they like, neat
+        val basket = ShoppingBasket("Chris", listOf("cheese", "eggs"))
+        expectThat(basket.user).isEqualTo("Chris")
+        expectThat(basket.size).isEqualTo(2)
+        expectThat(basket.reduce{acc, item -> acc+item}).isEqualTo("cheeseeggs")
     }
 }
