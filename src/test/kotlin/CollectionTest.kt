@@ -101,9 +101,13 @@ class IterationKtTest {
     fun `type aliases are a nice way to encapsulate collections`() {
         val x = ChrisCollection(listOf(1, 2, 3))
         val y: ChrisCollection = listOf(4, 5, 6)
+        val z = listOf(1, 1, 1)
+        val dave: List<Int> = listOf(2,2)
 
         expectThat(x.FancySum).isEqualTo(6)
         expectThat(y.FancySum).isEqualTo(15)
+        expectThat(z.FancySum).isEqualTo(3)
+        expectThat(dave.FancySum).isEqualTo(4)
     }
 }
 
