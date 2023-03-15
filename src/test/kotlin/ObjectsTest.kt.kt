@@ -16,6 +16,13 @@ class ObjectsTest {
     interface Animal {
         fun speak(): String
     }
+
+    fun human(name: String) = object : Animal {
+        override fun speak(): String {
+            return "Hello, I am ${name}"
+        }
+    }
+
     @Test
     fun `you cant use anon objects as return types or arguments, but they can impl interfaces`() {
         fun speak(animal: Animal): String {
@@ -31,8 +38,11 @@ class ObjectsTest {
                 return "meow"
             }
         }
+        val me = human("Chris")
+
         assertThat(speak(dog), equalTo("this animal goes woof"))
         assertThat(speak(cat), equalTo("this animal goes meow"))
+        assertThat(speak(me), equalTo("this animal goes Hello, I am Chris"))
     }
 
     object Computer {
