@@ -3,7 +3,9 @@ import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import kotlin.math.exp
 import kotlin.properties.Delegates.observable
+import kotlin.time.Duration.Companion.milliseconds
 
 interface Worker {
     fun work(): String
@@ -88,18 +90,21 @@ class DelegationTest {
 
     class ShoppingBasket(
         val user: String,
-        val items: List<ShoppingItem>,
+        private val items: List<ShoppingItem>,
     ): List<ShoppingItem> by items
 
     @Test
     fun `collections with other properties`() {
-        // this approach lets callers leverage the collections API however they like, neat
         val basket = ShoppingBasket("Chris", listOf(
             ShoppingItem("Cheese", 3),
             ShoppingItem("Eggs", 1)),
         )
-        expectThat(basket.user).isEqualTo("Chris")
-        expectThat(basket.size).isEqualTo(2)
-        expectThat(basket.totalPrice()).isEqualTo(4)
+        expectThat(basket.user).isEqualTo("Chris") // field on the type
+        expectThat(basket.size).isEqualTo(2)  // delegated from list
+        expectThat(basket.totalPrice()).isEqualTo(4) // extension method
+
+        val updatedBasket: List<ShoppingItem> = basket + ShoppingItem("Bread", 2)
+        expectThat(updatedBasket.size).isEqualTo(3)
+        expectThat(updatedBasket.totalPrice()).isEqualTo(6)
     }
 }

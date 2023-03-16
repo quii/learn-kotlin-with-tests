@@ -109,6 +109,15 @@ class IterationKtTest {
         expectThat(z.FancySum).isEqualTo(3)
         expectThat(dave.FancySum).isEqualTo(4)
     }
+
+    @Test
+    fun `fun with maps`() {
+        val defaultPrice = 100
+        val prices = mapOf("Eggs" to 1, "Bread" to 10).withDefault { defaultPrice }
+        expectThat(prices.getValue("Eggs")).isEqualTo(1)
+        expectThat(prices.getValue("Bread")).isEqualTo(10)
+        expectThat(prices.getValue("Pie")).isEqualTo(defaultPrice)
+    }
 }
 
 typealias ChrisCollection = List<Int>
