@@ -17,9 +17,13 @@ annotation class Action
 /*
 These categorisations are interesting, if you annotated all your code, it would tell you something
 
-Ideally, we want very few actions
- */
+Ideally, we want very few actions.
 
+If you see something that's an action, you may be able to pull up the action part of it out,
+to further separate out from your domain and convert into a calculation.
+
+Which is easier to re-use, test, etc.
+ */
 
 @Action
 fun writeToDisk() {}
