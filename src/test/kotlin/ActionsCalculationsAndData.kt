@@ -29,7 +29,14 @@ can generally be fine, but changing order of actions and stuff is dicier.
 @Action
 fun writeToDisk() {}
 
-@Action // try removing this action and see what the IDE suggests
+@Action // try removing this annotation and see what the IDE suggests
 fun somethingThatCallsWriteToDisk() {
+    println("lol")
+    // you either have to mark this as an action, or refactor away the action
     writeToDisk()
+}
+
+@Action
+fun main() {
+    somethingThatCallsWriteToDisk()
 }
