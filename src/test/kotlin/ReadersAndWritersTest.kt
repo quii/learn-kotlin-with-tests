@@ -30,13 +30,23 @@ LMAO
     }
 }
 
+fun capitaliseAndNewLine(x: String) = "${x.uppercase()}\n"
+
 class ReadEverythingAndThenTransformTest : AllCapsContract({ r, w ->
     r.readLines()
-        .map(String::uppercase)
-        .joinToString("") { it + "\n" }
+        .joinToString("", transform = ::capitaliseAndNewLine)
+        .let { w.write(it) }
+})
+
+class AnotherOneWhyNotTest: AllCapsContract({r, w ->
+    r.readLines().asSequence().forEach { w.write(capitaliseAndNewLine(it)) }
+})
+
+class FoldItTest: AllCapsContract({r, w ->
+    r.readLines().fold("") { acc, thing -> acc + capitaliseAndNewLine(thing) }
         .let { w.write(it) }
 })
 
 class StreamedTransformsTest : AllCapsContract({ r, w ->
-    r.buffered().lines().forEach { if (it.isNotBlank()) w.appendLine(it.uppercase()) }
+    r.buffered().lines().forEach { w.appendLine(it.uppercase()) }
 })
