@@ -9,7 +9,11 @@ import java.io.Writer
 abstract class AllCapsContract(val f: (Reader, Writer) -> Unit) {
     @Test
     fun `whatever man`() {
-        val r = StringReader("lol\nwtf\nlmao")
+        val r = StringReader(
+            """lol
+wtf
+lmao"""
+        )
 
         val w = StringWriter()
 
@@ -17,7 +21,12 @@ abstract class AllCapsContract(val f: (Reader, Writer) -> Unit) {
 
         val got = w.toString()
 
-        expectThat(got).isEqualTo("LOL\nWTF\nLMAO\n")
+        expectThat(got).isEqualTo(
+            """LOL
+WTF
+LMAO
+"""
+        )
     }
 }
 
