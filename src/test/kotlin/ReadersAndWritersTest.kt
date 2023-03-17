@@ -1,16 +1,15 @@
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.io.Reader
 import java.io.StringReader
 import java.io.StringWriter
+import java.io.Writer
 
-abstract class AllCapsContract(val f: (StringReader, StringWriter) -> Unit) {
+abstract class AllCapsContract(val f: (Reader, Writer) -> Unit) {
     @Test
     fun `whatever man`() {
-        val r = StringReader("""lol
-            |wtf
-            |lmao
-        """.trimMargin())
+        val r = StringReader("lol\nwtf\nlmao")
 
         val w = StringWriter()
 
@@ -18,16 +17,17 @@ abstract class AllCapsContract(val f: (StringReader, StringWriter) -> Unit) {
 
         val got = w.toString()
 
-        expectThat(got).isEqualTo("""LOL
-            |WTF
-            |LMAO
-        """.trimMargin())
+        expectThat(got).isEqualTo("LOL\nWTF\nLMAO\n")
     }
 }
 
-fun notEfficientAllCapper(r: StringReader, w: StringWriter) {
-    val allCaps = r.readLines().map(String::uppercase).joinToString("\n")
-    w.write(allCaps)
-}
+class ReadEverythingAndThenTransformTest : AllCapsContract({ r, w ->
+    r.readLines()
+        .map(String::uppercase)
+        .joinToString("") { it + "\n" }
+        .let { w.write(it) }
+})
 
-class NotEfficientAllCapsTest : AllCapsContract(::notEfficientAllCapper)
+class StreamedTransformsTest : AllCapsContract({ r, w ->
+    r.buffered().lines().forEach { if (it.isNotBlank()) w.appendLine(it.uppercase()) }
+})
