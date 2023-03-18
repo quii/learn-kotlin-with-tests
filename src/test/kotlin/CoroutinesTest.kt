@@ -1,12 +1,8 @@
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isLessThan
-import kotlin.math.exp
 import kotlin.system.measureTimeMillis
 
 class CoroutinesTest {
@@ -86,9 +82,39 @@ class CoroutinesTest {
         runBlocking {
             val job1 = launch { addThree() }
             addTwo() // as we're not waiting for job1, this will happen first
+            job1.join()
         }
 
         expectThat(calls).isEqualTo(mutableListOf(3, 2, 2, 2, 3))
+    }
+
+    private suspend fun load100(): Int {
+        delay(100)
+        return 100
+    }
+
+    @Test
+    fun `deferring`() {
+        val elapsed = measureTimeMillis {
+            runBlocking {
+                val data1 = async { load100() }
+                val data2 = async { load100() }
+                val result1 = data1.await()
+                val result2 = data2.await()
+                expectThat(result1 + result2).isEqualTo(200)
+            }
+        }
+        expectThat(elapsed).isLessThan(150)
+    }
+
+    @Test
+    fun `deferring multiple things`() {
+        runBlocking {
+            val sum = (1..3).map {
+                async { load100() }
+            }.awaitAll().sum()
+            expectThat(sum).isEqualTo(300)
+        }
     }
 
 }
