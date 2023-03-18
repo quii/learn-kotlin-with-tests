@@ -27,16 +27,16 @@ can generally be fine, but changing order of actions and stuff is dicier.
  */
 
 @Action
-fun writeToDisk() {}
+fun getNumberFromDisk() = 2
 
-@Action // try removing this annotation and see what the IDE suggests
-fun somethingThatCallsWriteToDisk() {
-    println("lol")
-    // you either have to mark this as an action, or refactor away the action
-    writeToDisk()
-}
+@Action // removing this will cause a compilation error
+fun multiplyByThingOnDisk() = getNumberFromDisk() * 2
 
-@Action
+@Calculation
+fun multiplyByThing(getThing: () -> Int) = getThing() * 2
+
+@Action //main will always be an action :)
 fun main() {
-    somethingThatCallsWriteToDisk()
+    println(multiplyByThingOnDisk())
+    println(multiplyByThing(::getNumberFromDisk))
 }
