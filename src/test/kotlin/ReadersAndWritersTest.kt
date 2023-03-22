@@ -6,7 +6,11 @@ import java.io.StringReader
 import java.io.StringWriter
 import java.io.Writer
 
-abstract class AllCapsContract(val f: (Reader, Writer) -> Unit) {
+fun interface AllCapper {
+    operator fun invoke(r: Reader, w: Writer)
+}
+
+abstract class AllCapsContract(val f: AllCapper) {
     @Test
     fun `whatever man`() {
         val r = StringReader(
