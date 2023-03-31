@@ -1,6 +1,8 @@
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isTrue
 
 class DSLTest {
     @Test
@@ -10,6 +12,12 @@ class DSLTest {
             end by 10.00
         }
         assertThat(meeting.toString(), equalTo("Release Planning meeting from 9.00 to 10.00"))
+    }
+
+    @Test
+    fun `simple infix demo`() {
+        infix fun String.shouldEqual(x: String) = x == this
+        expectThat("poo" shouldEqual "poo").isTrue()
     }
 }
 
