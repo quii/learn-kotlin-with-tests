@@ -6,18 +6,18 @@ import strikt.assertions.isTrue
 
 class DSLTest {
     @Test
+    fun `simple infix demo`() {
+        infix fun String.shouldEqual(x: String) = x == this
+        expectThat("poo" shouldEqual "poo").isTrue()
+    }
+
+    @Test
     fun `we can create a DSL for creating meetings using lambda extensions`() {
         val meeting = "10% time demos" meeting {
             start at 16.00
             end by 17.00
         }
         assertThat(meeting.toString(), equalTo("10% time demos meeting from 16.00 to 17.00"))
-    }
-
-    @Test
-    fun `simple infix demo`() {
-        infix fun String.shouldEqual(x: String) = x == this
-        expectThat("poo" shouldEqual "poo").isTrue()
     }
 }
 

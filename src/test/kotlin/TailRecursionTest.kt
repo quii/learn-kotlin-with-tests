@@ -1,16 +1,7 @@
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-
-fun interface Factorial {
-    operator fun invoke(n: Int): Int
-}
-
-abstract class FactorialContract(val f: Factorial) {
-    @Test fun `death to stackoverflow`() {
-        expectThat(f(5)).isEqualTo(120)
-    }
-}
 
 fun factorial(number: Int): Int = when(number) {
     0, 1 -> 1
@@ -25,7 +16,6 @@ fun factorialTR(number: Int, accumulator: Int = 1): Int {
 }
 
 // look in the bytecode for a GOTO :) it basically replaces the recursive calls with a for loop
-// just like Go, the language of elite programmers.
 tailrec fun actuallyTRFactorial(number: Int, accumulator: Int = 1): Int {
     return when(number) {
         0 -> accumulator
@@ -33,8 +23,24 @@ tailrec fun actuallyTRFactorial(number: Int, accumulator: Int = 1): Int {
     }
 }
 
-class NonTailRecursiveFactorialTest : FactorialContract(::factorial)
+class FactorialTests {
+    fun interface Factorial {
+        operator fun invoke(n: Int): Int
+    }
 
-class TailRecursiveFactorialTest: FactorialContract(::factorialTR)
+    abstract class FactorialContract(val f: Factorial) {
+        @Test fun `it can calculate the factorial of 5, woah`() {
+            expectThat(f(5)).isEqualTo(120)
+        }
+    }
+    @Nested
+    inner class NonTailRecursiveFactorialTest : FactorialContract(::factorial)
 
-class ActuallyTailRecursiveFactorialTest: FactorialContract(::actuallyTRFactorial)
+    @Nested
+    inner class TailRecursiveFactorialTest: FactorialContract(::factorialTR)
+
+    @Nested
+    inner class ActuallyTailRecursiveFactorialTest: FactorialContract(::actuallyTRFactorial)
+}
+
+
