@@ -21,6 +21,19 @@ class DSLTest {
     }
 }
 
+infix fun String.meeting(block: Meeting.() -> Unit): Meeting {
+    val meeting = Meeting(this)
+    meeting.block()
+    return meeting
+}
+
+data class Meeting(val title: String) {
+    val start = StartTime()
+
+    val end = EndTime()
+    override fun toString() = "$title meeting from $start to $end"
+}
+
 open class MeetingTime(var time: String = "") {
     protected fun convertToString(time: Double) = String.format("%.2f", time)
     override fun toString() = time
@@ -32,17 +45,4 @@ class StartTime: MeetingTime() {
 
 class EndTime: MeetingTime() {
     infix fun by(theTime: Double) { time = convertToString(theTime) }
-}
-
-data class Meeting(val title: String) {
-    val start = StartTime()
-    val end = EndTime()
-
-    override fun toString() = "$title meeting from $start to $end"
-}
-
-infix fun String.meeting(block: Meeting.() -> Unit): Meeting {
-    val meeting = Meeting(this)
-    meeting.block()
-    return meeting
 }

@@ -8,6 +8,7 @@ fun factorial(number: Int): Int = when(number) {
     else -> number * factorial(number -1)
 }
 
+// kotlin compiler wont auto-magic tail call optimisation
 fun factorialTR(number: Int, accumulator: Int = 1): Int {
     return when(number) {
         0 -> accumulator
