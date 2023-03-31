@@ -6,12 +6,12 @@ import strikt.assertions.isTrue
 
 class DSLTest {
     @Test
-    fun `we can create a DSL for creating meetings`() {
-        val meeting = "Release Planning" meeting {
-            start at 9.00
-            end by 10.00
+    fun `we can create a DSL for creating meetings using lambda extensions`() {
+        val meeting = "10% time demos" meeting {
+            start at 16.00
+            end by 17.00
         }
-        assertThat(meeting.toString(), equalTo("Release Planning meeting from 9.00 to 10.00"))
+        assertThat(meeting.toString(), equalTo("10% time demos meeting from 16.00 to 17.00"))
     }
 
     @Test
@@ -40,8 +40,6 @@ data class Meeting(val title: String) {
 
     override fun toString() = "$title meeting from $start to $end"
 }
-
-fun String.shout() = this.uppercase()
 
 infix fun String.meeting(block: Meeting.() -> Unit): Meeting {
     val meeting = Meeting(this)
