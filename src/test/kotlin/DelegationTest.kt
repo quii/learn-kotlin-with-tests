@@ -51,7 +51,7 @@ class DelegationTest {
     }
 
     @Test
-    fun `decoration and deletion`() {
+    fun `decoration and delegation`() {
         val manager = DecoratorManager(JavaProgrammer())
         assertThat(manager.work(), equalTo("WORKING: I'm a Java programmer, so I'm working on a Java project"))
     }
