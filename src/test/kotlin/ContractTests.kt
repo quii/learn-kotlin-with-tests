@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -39,7 +40,9 @@ abstract class CalculatorContract(private val calculator: Calculator) {
     fun `identity property`() {
         expectThat(calculator.add(1, 0)).isEqualTo(1)
     }
+    @Nested
+    class CalculatorATest : CalculatorContract(CalculatorA())
+    @Nested
+    class CalculatorBTest : CalculatorContract(CalculatorB())
 }
 
-class CalculatorATest : CalculatorContract(CalculatorA())
-class CalculatorBTest : CalculatorContract(CalculatorB())
