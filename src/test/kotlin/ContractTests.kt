@@ -19,15 +19,16 @@ interface Calculator {
     fun add(a: Int, b: Int): Int
 }
 
-// contracts should be abstract or junit may try and run them!
-abstract class CalculatorContract(private val calculator: Calculator) {
+interface CalculatorCumulativeContract : CalculatorContract {
     @Test
     fun `cumulative property`() {
         val a = 1
         val b = 2
         expectThat(calculator.add(a, b)).isEqualTo(calculator.add(b, a))
     }
+}
 
+interface CalculatorAssociativeContract : CalculatorContract {
     @Test
     fun `associative property`() {
         val a = 1
@@ -35,14 +36,27 @@ abstract class CalculatorContract(private val calculator: Calculator) {
         val c = 3
         expectThat(calculator.add(a, calculator.add(b, c))).isEqualTo(calculator.add(calculator.add(a, b), c))
     }
+}
 
+interface CalculatorIdentityContract : CalculatorContract {
     @Test
     fun `identity property`() {
         expectThat(calculator.add(1, 0)).isEqualTo(1)
     }
+}
+
+interface CalculatorContract {
+    val calculator: Calculator
+}
+
+class CalculatorTests {
     @Nested
-    class CalculatorATest : CalculatorContract(CalculatorA())
+    class CalculatorATest : CalculatorIdentityContract, CalculatorAssociativeContract, CalculatorCumulativeContract {
+        override val calculator: Calculator = CalculatorA()
+    }
     @Nested
-    class CalculatorBTest : CalculatorContract(CalculatorB())
+    class CalculatorBTest: CalculatorIdentityContract, CalculatorAssociativeContract, CalculatorCumulativeContract {
+        override val calculator: Calculator = CalculatorB()
+    }
 }
 
